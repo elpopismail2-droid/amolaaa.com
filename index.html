@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>هابي فلانتين داي</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin:0;
+        padding:0;
+        height:100vh;
+        overflow:hidden;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        background: linear-gradient(45deg, #ff9a9e, #fad0c4, #ffdde1);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        color:white;
+        text-align:center;
+    }
+
+    @keyframes gradientShift {
+        0% {background-position:0% 50%;}
+        50% {background-position:100% 50%;}
+        100% {background-position:0% 50%;}
+    }
+
+    .hearts {
+        position:absolute;
+        top:0; left:0;
+        width:100%; height:100%;
+        pointer-events:none;
+        z-index:-1;
+    }
+    .heart, .word {
+        position:absolute;
+        font-size:2em;
+        color: rgba(255,255,255,0.7);
+        animation: float 6s linear infinite;
+    }
+    @keyframes float {
+        0% {transform:translateY(100vh) rotate(0deg);}
+        100% {transform:translateY(-100px) rotate(360deg);}
+    }
+
+    #login, #main {
+        background: rgba(0,0,0,0.6);
+        padding:20px;
+        border-radius:15px;
+        max-width:400px;
+        width:90%;
+        display:none;
+    }
+
+    #login input {
+        width:80%;
+        padding:10px;
+        margin:10px 0;
+        border-radius:5px;
+        border:none;
+        font-size:1em;
+    }
+
+    #login button {
+        padding:10px 20px;
+        font-size:1em;
+        border:none;
+        border-radius:5px;
+        background:#ff1493;
+        color:white;
+        cursor:pointer;
+    }
+
+    #login button:hover {background:#ff69b4;}
+
+    #error {color:red; display:none;}
+
+    #clickHeart {
+        font-size:120px;
+        cursor:pointer;
+        animation:pulse 2s infinite;
+        margin-bottom:20px;
+    }
+    @keyframes pulse {
+        0% {transform:scale(1);}
+        50% {transform:scale(1.1);}
+        100% {transform:scale(1);}
+    }
+
+    #message {
+        max-height:300px;
+        overflow-y:auto;
+        text-align:right;
+        background: rgba(255,255,255,0.9);
+        color:#333;
+        padding:20px;
+        border-radius:15px;
+        font-size:1em;
+        line-height:1.6;
+        display:none;
+    }
+</style>
+</head>
+<body>
+<div class="hearts" id="heartsContainer"></div>
+
+<!-- صفحة الدخول -->
+<div id="login">
+    <h2>ادخل الباسورد</h2>
+    <input type="password" id="password" placeholder="الباسورد">
+    <button id="submit">دخول</button>
+    <p id="error">الباسورد غلط!</p>
+</div>
+
+<!-- الصفحة الرئيسية -->
+<div id="main">
+    <div id="clickHeart">❤️</div>
+    <div id="message"></div>
+    <audio id="myAudio" autoplay loop>
+        <source src="Albumaty.Com_bhaa_sltan_ydwm_alaman.mp3" type="audio/mpeg">
+        متصفحك مش يدعم تشغيل الصوت.
+    </audio>
+</div>
+
+<script>
+    // قلوب وكلمات طايرة
+    const heartsContainer = document.getElementById('heartsContainer');
+    const words = ['Love','Amolty','❤️','💖','Happy'];
+    for(let i=0;i<20;i++){
+        const heart = document.createElement('div');
+        heart.className='heart';
+        heart.textContent='❤️';
+        heart.style.left=Math.random()*100+'%';
+        heart.style.animationDelay=Math.random()*6+'s';
+        heartsContainer.appendChild(heart);
+    }
+    for(let i=0;i<10;i++){
+        const word = document.createElement('div');
+        word.className='word';
+        word.textContent=words[Math.floor(Math.random()*words.length)];
+        word.style.left=Math.random()*100+'%';
+        word.style.top=Math.random()*100+'%';
+        word.style.animationDelay=Math.random()*4+'s';
+        heartsContainer.appendChild(word);
+    }
+
+    // الباسورد
+    document.getElementById('login').style.display='block';
+    document.getElementById('submit').addEventListener('click',function(){
+        const pw = document.getElementById('password').value;
+        if(pw==='امولتي'){
+            document.getElementById('login').style.display='none';
+            document.getElementById('main').style.display='block';
+            document.getElementById('myAudio').play();
+        } else {
+            document.getElementById('error').style.display='block';
+        }
+    });
+
+    // تأثير الكتابة للرسالة
+    const fullMessage = `هابي فلانتين داي امولتييييييييي
+كل سنة واحنا طيبين وكل يوم يارب نكون لبعض
+احب اقولك اني بحبك
+بحبك ذات نفسك بحب ضحكتك بحب شخصيتك المتواضعة
+بحب ابتسامتك وجودك جنبي مخلي الدنيا اجمل
+وضحكتك لوحدها تكفي تغير يومي كله
+كل سنة وانتي اجمل حاجة حصلتلي ❤️
+وجودك جنبي مخلي الدنيا اهدى واجمل وضحكتك لوحدها كفاية تغير يومي كله
+يمكن مش بعرف اقول كلام كتير بس الحقيقة انك فرق كبير في حياتي`;
+
+    const messageElement = document.getElementById('message');
+    let index=0;
+    document.getElementById('clickHeart').addEventListener('click',function(){
+        messageElement.style.display='block';
+        messageElement.textContent='';
+        index=0;
+        document.getElementById('myAudio').play();
+        typeWriter();
+    });
+
+    function typeWriter(){
+        if(index<fullMessage.length){
+            messageElement.textContent+=fullMessage.charAt(index);
+            index++;
+            setTimeout(typeWriter,50);
+        }
+    }
+</script>
+</body>
+</html>
